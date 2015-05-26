@@ -1,0 +1,27 @@
+{
+  "name": "google-compute-metadata",
+  "version": "1.0.0",
+  "description": "Gets Google Compute Engine Metadata",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git@github.com/iamat/google-compute-metadata"
+  },
+  "keywords": [
+    "google",
+    "cloud",
+    "gce"
+  ],
+  "author": "Lars Jacob",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamat/google-compute-metadata/issues"
+  },
+  "homepage": "https://github.com/iamat/google-compute-metadata",
+  "dependencies": {
+    "bl": "^0.9.4"
+  }
+}
