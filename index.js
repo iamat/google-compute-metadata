@@ -5,7 +5,7 @@ var http = require("http"),
 var METADATA_URL = "http://metadata.google.internal/computeMetadata/v1";
 
 function metadataRequest (path, callback) {
-    var completURL = METADATA_URL + path + "/?recursive=true",
+    var completURL = METADATA_URL + path,
         options = url.parse(completURL);
 
     options.headers = {
@@ -26,23 +26,36 @@ function metadataRequest (path, callback) {
                 return;
             }
 
-            try {
-                json = JSON.parse(data.toString());
-            } catch (err) {
-                callback(err);
-                return;
-            }
-            callback(null, json);
+            callback(null, data.toString());
         }));
     }).on("error", function (err) {
         callback(err);
     });
 }
 
+function metadataRequestRecursive (path, callback) {
+    path += "/?recursive=true";
+    metadataRequest(path, function (err, body) {
+        var json = {};
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        try {
+            json = JSON.parse(body);
+        } catch (err) {
+            callback(err);
+            return;
+        }
+        callback(null, json);
+      });
+}
+
 exports.instance = function (callback) {
-    metadataRequest("/instance", callback);
+    metadataRequestRecursive("/instance", callback);
 };
 
 exports.project = function (callback) {
-    metadataRequest("/project", callback);
+    metadataRequestRecursive("/project", callback);
 };
