@@ -53,7 +53,22 @@ function metadataRequestRecursive (path, callback) {
 }
 
 exports.instance = function (callback) {
-    metadataRequestRecursive("/instance", callback);
+    metadataRequestRecursive("/instance", function (err, data) {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        metadataRequest("/instance/id", function (err, id) {
+            if (err) {
+                callback(err);
+                return;
+            }
+
+            data.id = id || data.id;
+            callback(null, data);
+        });
+    });
 };
 
 exports.project = function (callback) {
