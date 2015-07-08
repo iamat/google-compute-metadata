@@ -1,6 +1,6 @@
 {
   "name": "google-compute-metadata",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Gets Google Compute Engine Metadata",
   "main": "index.js",
   "scripts": {
