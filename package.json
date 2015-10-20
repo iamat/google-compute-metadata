@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/iamat/google-compute-metadata",
   "dependencies": {
-    "bl": "^0.9.4"
+    "bl": "^1.0.0"
   }
 }
