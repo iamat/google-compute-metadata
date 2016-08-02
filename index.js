@@ -1,10 +1,11 @@
 var http = require("http"),
     url = require("url"),
-    bl = require("bl");
+    bl = require("bl"),
+    backoff = require("backoff");
 
 var METADATA_URL = "http://metadata.google.internal/computeMetadata/v1";
 
-function metadataRequest (path, callback) {
+function _metadataRequest (path, callback) {
     var completURL = METADATA_URL + path,
         options = url.parse(completURL);
 
@@ -31,6 +32,17 @@ function metadataRequest (path, callback) {
     }).on("error", function (err) {
         callback(err);
     });
+}
+
+function metadataRequest (path, callback) {
+    var call = backoff.call(_metadataRequest, path, callback);
+
+    // DNS errors shouldn't be retried because the program probably
+    // isn't running in the google cloud environment
+    call.retryIf(function(err) { return err.code != "ENOTFOUND"; });
+    call.setStrategy(new backoff.ExponentialStrategy());
+    call.failAfter(10);
+    call.start();
 }
 
 function metadataRequestRecursive (path, callback) {
